@@ -10,6 +10,8 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = os.getenv("ADMIN_ID")
 
+PROB = 7 #(1/PROB-1)
+
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
@@ -31,19 +33,19 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
-        return
+    #if message.author == bot.user:
+    #    return
 
     global prank_active
-    rand = r.randrange(10)
+    rand = r.randrange(PROB)
     print(rand)
-    if prank_active and message.guild and rand==1:
+    if prank_active and message.guild and rand==0:
             try:
-                msg = data[str(ctx.author.id)]["werid"][r.randrange(len(data[str(ctx.author.id)]["werid"]))]
-                await message.channel.send(f"coucou {msg}")
+                msg = data[str(message.author.id)]["weird name"][r.randrange(len(data[str(message.author.id)]["weird name"]))]
+                await message.reply(f"coucou {msg}")
                 await bot.process_commands(message)
-            except:
-                print("error")
+            except Exception as e:
+                print(f"error {e}")
 
 
 @bot.command()
